@@ -10,8 +10,5 @@ $hook->enableDebug();
 // Adding path for repository root directory
 $hook->addPath('/var/www/');
 
-// Adding `master` branch
-$hook->addBranch('master');
-
 // Deploy the commits
 $hook->deploy();
