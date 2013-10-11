@@ -1,31 +1,22 @@
 Fork from https://github.com/kwangchin/GitHubHook
 
 ## Repo Directory Structure
-Given that `/var/www/` is repository root directory. `master`, `production` and `testing` are branch names.
+Given that `/var/www/` is repository root directory.
 <pre>
-/var/www/master/project1
-/var/www/master/project2
-/var/www/master/project3
-/var/www/production/project1
-/var/www/production/project2
-/var/www/production/project3
-/var/www/testing/project1
-/var/www/testing/project2
-/var/www/testing/project3
+/var/www/project1
+/var/www/project2
+/var/www/project3
 </pre>
 
 
 ## How it works
-Instead of deploying site with hooks, this fork use github hooks to sync/update repository on your remote server.
+Instead of deploying site with hooks, this fork use github hooks to sync/update repository on your remote server. The difference between this fork is that we use `rm -rf` and `git clone` to update the repository. Also, we don't do any `git checkout`.
 
-Using repository directory structure from previous example, if you want to checkout branches `master`, `production`, `testing` and place it under directory `/var/www/`, add the following settings to `hook.php`.
+To set repository root directory under `/var/www/`, add the following settings to `hook.php`.
 <pre>
 $hook->addPath('/var/www/');
-$hook->addBranch('master');
-$hook->addBranch('production');
-$hook->addBranch('testing');
 </pre>
 
 
 ## Security
-You need to give apache permission to create branch directory if it doesn't exist. Something like `chown apache:apache -R /var/www/` works fine. Never ever use `0777` for permission! And yes, change your `hook.php` file name
+You need to give apache permission to carry out actions for repository root directory. Something like `chown apache:apache -R /var/www/` works fine. Never ever use `0777` for permission! And yes, change your `hook.php` file name
