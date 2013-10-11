@@ -139,19 +139,6 @@ class GitHubHook
     }
     
     /**
-     * Add a branch.
-     * @param string $name Branch name, defaults to 'master'.
-     * @since 1.0
-     */
-    
-    public function addBranch($name = 'master')
-    {
-        $this->_branches[] = array(
-            'name' => $name
-        );
-    }
-    
-    /**
      * Log a message.
      * @param string $message Message to log.
      * @since 1.0
@@ -171,28 +158,20 @@ class GitHubHook
     {
         // Check the remote is a whitelisted GitHub public ip.
         if ($this->ip_in_cidrs($this->_remoteIp, $this->_github_public_cidrs)) {
-            $repo_name = $this->_payload->repository->name;
-            $repo_url  = $this->_payload->repository->url;
-            foreach ($this->_branches as $branch) {
-                if ($this->_payload->ref == 'refs/heads/' . $branch['name']) {
-                    $path_to_branch = "{$this->_path}{$branch['name']}";
-                    $path_to_repo   = "{$this->_path}{$branch['name']}/{$repo_name}";
-                    
-                    if (!file_exists($path_to_branch)) {
-                        $this->log('Create branch directory ' . $path_to_branch);
-                        shell_exec("mkdir {$path_to_branch}");
-                    }
-                    
-                    if (file_exists($path_to_repo)) {
-                        $this->log('Delete repo ' . $path_to_repo);
-                        shell_exec("rm -rf {$path_to_repo}");
-                    }
-                    
-                    $this->log('Adding branch ' . $branch['name'] . ' from repo ' . $repo_url . ' to path ' . $path_to_repo);
-                    shell_exec("cd {$path_to_branch} && git clone {$repo_url} {$repo_name} && cd {$repo_name} && git checkout {$branch['name']} 2>&1");
-                    
-                }
+            $repo_name    = $this->_payload->repository->name;
+            $repo_url     = $this->_payload->repository->url;
+            $path_to_repo = "{$this->_path}{$repo_name}";
+            
+            if (file_exists($path_to_repo)) {
+                $this->log('Delete repo ' . $path_to_repo);
+                shell_exec("rm -rf {$path_to_repo}");
             }
+            
+            $this->log('Adding repo ' . $repo_url . ' to path ' . $path_to_repo);
+            shell_exec("cd {$this->_path} && git clone {$repo_url} {$repo_name} 2>&1");
+            
+            
+            
         } else {
             // IP of remote is invalid.
             $this->_notFound('IP address not recognized: ' . $this->_remoteIp);
