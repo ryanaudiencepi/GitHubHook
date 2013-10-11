@@ -2,7 +2,7 @@ Fork from https://github.com/kwangchin/GitHubHook
 
 ## Repo Directory Structure
 Given that `/var/www/` is repository root directory. `master`, `production` and `testing` are branch names.
-<code><pre>
+<pre>
 /var/www/master/project1
 /var/www/master/project2
 /var/www/master/project3
@@ -12,19 +12,19 @@ Given that `/var/www/` is repository root directory. `master`, `production` and 
 /var/www/testing/project1
 /var/www/testing/project2
 /var/www/testing/project3
-</code></pre>
+</pre>
 
 
 ## How it works
 Instead of deploying site with hooks, this fork use github hooks to sync/update repository on your remote server.
 
 Using repository directory structure from previous example, if you want to checkout branches `master`, `production`, `testing` and place it under directory `/var/www/`, add the following settings to `hook.php`.
-<code><pre>
+<pre>
 $hook->addPath('/var/www/');
 $hook->addBranch('master');
 $hook->addBranch('production');
 $hook->addBranch('testing');
-</code></pre>
+</pre>
 
 
 ## Security
