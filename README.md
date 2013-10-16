@@ -10,7 +10,7 @@ Given that `/var/www/` is repository root directory.
 
 
 ## How it works
-Instead of deploying site with hooks, this fork use github hooks to sync/update repository on your remote server. The difference between this fork is that we use `rm -rf` and `git clone` to update the repository. Also, we don't do any `git checkout`.
+Instead of deploying site with hooks, this fork use github hooks to sync/update repository on your remote server. The difference between this fork is that we use `rm -rf` and `git clone` to update the repository. Also, we don't do any `git checkout`. Instead of having a log directory, we use syslog to handle the logging.
 
 To set repository root directory under `/var/www/`, add the following settings to `hook.php`.
 <pre>

@@ -28,7 +28,7 @@ class GitHubHook
      * @var boolean Log debug messages.
      * @since 1.0
      */
-    private $_debug = FALSE;
+    private $_logging = TRUE;
     
     /**
      * @var string path to repo directory
@@ -123,9 +123,9 @@ class GitHubHook
      * Enable log of debug messages.
      * @since 1.0
      */
-    public function enableDebug()
+    public function disableLogging()
     {
-        $this->_debug = TRUE;
+        $this->_logging = FALSE;
     }
     
     /**
@@ -145,8 +145,10 @@ class GitHubHook
      */
     public function log($message)
     {
-        if ($this->_debug) {
-            file_put_contents('log/hook.log', '[' . date('Y-m-d H:i:s') . '] - ' . $message . PHP_EOL, FILE_APPEND);
+        if ($this->_logging) {
+            openlog('php', LOG_CONS | LOG_NDELAY | LOG_PID, LOG_USER | LOG_PERROR);
+            syslog(LOG_INFO, $message);
+            closelog();
         }
     }
     
